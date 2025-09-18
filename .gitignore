@@ -1,0 +1,22 @@
+# Virtual environments
+.venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test artifacts
+.coverage
+.pytest_cache/
+
+# Build outputs
+build/
+dist/
+
+# macOS
+.DS_Store
+
+# domain
+*.csv
+*.xls[x]

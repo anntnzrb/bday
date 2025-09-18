@@ -1,10 +1,14 @@
-# Bday
+# bday
 
-CSV contact processor that extracts names and emails.
+Python CLI that transforms birthday contact spreadsheets into `name;email` CSVs.
 
 ## Usage
 ```bash
-dotnet run input.csv
+uv run bday <input-file>
 ```
 
-Creates `input-parsed.csv` with format: `name;email`
+The command accepts either `*.csv` or `*.xlsx` inputs and writes
+`<input>.parsed.csv` alongside the source file.
+
+> Legacy `*.xls` spreadsheets are not supported. Convert them to `.xlsx` or
+> `.csv` before running the tool.

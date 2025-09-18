@@ -23,6 +23,10 @@ dist/
 [Bb]in/
 [Oo]bj/
 
+# Ignore legacy F# artifacts explicitly
+*.fs
+*.fsproj
+
 # Domain data files – never commit personal spreadsheets
 *.csv
 *.xls

@@ -4,10 +4,11 @@ from datetime import datetime, date
 from pathlib import Path
 from typing import Iterable, List
 
+import pandas as pd
 from openpyxl import load_workbook
 
 
-EXCEL_SUFFIXES = {".xlsx"}
+EXCEL_SUFFIXES = {".xlsx", ".xls"}
 DELIMITER = ";"
 
 
@@ -51,12 +52,19 @@ def _read_xlsx(path: Path) -> List[str]:
     return lines
 
 
+def _read_xls(path: Path) -> List[str]:
+    df = pd.read_excel(path)
+    lines: List[str] = []
+    for _, row in df.iterrows():
+        stringified = [_stringify_value(cell) for cell in row]
+        lines.append(DELIMITER.join(stringified))
+    return lines
+
+
 def read_excel_lines(path: Path) -> List[str]:
     suffix = path.suffix.lower()
     if suffix == ".xls":
-        raise ValueError(
-            "Legacy .xls files are not supported; convert the file to .xlsx or CSV."
-        )
+        return _read_xls(path)
     if suffix == ".xlsx":
         return _read_xlsx(path)
     raise ValueError(f"Unsupported Excel extension: {suffix}")

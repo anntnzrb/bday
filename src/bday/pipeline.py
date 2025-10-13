@@ -30,12 +30,6 @@ def process_lines(lines: Iterable[str]) -> List[str]:
 
 
 def process_file(path: Path) -> Path:
-    suffix = path.suffix.lower()
-    if suffix == ".xls":
-        raise ValueError(
-            "Legacy .xls files are not supported; convert the file to .xlsx or CSV."
-        )
-
     if is_excel_file(path):
         lines = read_excel_lines(path)
     else:

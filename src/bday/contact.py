@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import re
-from typing import Optional
 
 
 EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
@@ -41,7 +40,7 @@ def extract_first_name(full_name: str) -> str:
     return _capitalize(_first_token(candidate))
 
 
-def try_parse_contact(line: str, delimiter: str) -> Optional[Contact]:
+def try_parse_contact(line: str, delimiter: str) -> Contact | None:
     """Parse a semicolon-delimited line into a contact."""
 
     fields = line.split(delimiter, 2)

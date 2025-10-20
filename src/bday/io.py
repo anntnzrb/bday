@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from datetime import datetime, date
 from pathlib import Path
-from typing import Iterable, List
+from collections.abc import Iterable
 
 import pandas as pd
 from openpyxl import load_workbook
-
 
 EXCEL_SUFFIXES = {".xlsx", ".xls"}
 DELIMITER = ";"
@@ -16,12 +15,12 @@ def is_excel_file(path: Path) -> bool:
     return path.suffix.lower() in EXCEL_SUFFIXES
 
 
-def read_csv_lines(path: Path) -> List[str]:
+def read_csv_lines(path: Path) -> list[str]:
     with path.open("r", encoding="utf-8") as handle:
         return [line.rstrip("\n\r") for line in handle]
 
 
-def _stringify_value(value: object) -> str:
+def stringify_value(value: object) -> str:
     if value is None:
         return ""
 
@@ -39,29 +38,31 @@ def _stringify_value(value: object) -> str:
     return str(value)
 
 
-def _read_xlsx(path: Path) -> List[str]:
+def _read_xlsx(path: Path) -> list[str]:
     workbook = load_workbook(path, read_only=True, data_only=True)
-    lines: List[str] = []
+    lines: list[str] = []
     try:
         for worksheet in workbook.worksheets:
             for row in worksheet.iter_rows(values_only=True):
-                stringified = [_stringify_value(cell) for cell in row]
+                stringified = [stringify_value(cell) for cell in row]
                 lines.append(DELIMITER.join(stringified))
     finally:
         workbook.close()
     return lines
 
 
-def _read_xls(path: Path) -> List[str]:
-    df = pd.read_excel(path)
-    lines: List[str] = []
+def _read_xls(path: Path) -> list[str]:
+    df: pd.DataFrame = pd.read_excel(path)
+    lines: list[str] = []
     for _, row in df.iterrows():
-        stringified = [_stringify_value(cell) for cell in row]
+        # Type: ignore pandas cell values as they can be any type
+        row_values: list[object] = list(row)
+        stringified = [stringify_value(cell) for cell in row_values]
         lines.append(DELIMITER.join(stringified))
     return lines
 
 
-def read_excel_lines(path: Path) -> List[str]:
+def read_excel_lines(path: Path) -> list[str]:
     suffix = path.suffix.lower()
     if suffix == ".xls":
         return _read_xls(path)
@@ -73,5 +74,5 @@ def read_excel_lines(path: Path) -> List[str]:
 def write_csv_lines(path: Path, lines: Iterable[str]) -> None:
     with path.open("w", encoding="utf-8", newline="\n") as handle:
         for line in lines:
-            handle.write(line)
-            handle.write("\n")
+            _ = handle.write(line)
+            _ = handle.write("\n")

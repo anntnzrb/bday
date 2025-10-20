@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable, List
+from collections.abc import Iterable
 
 from .contact import try_parse_contact
 from .io import (
@@ -16,9 +16,9 @@ from .io import (
 HEADER = f"name{DELIMITER}email"
 
 
-def process_lines(lines: Iterable[str]) -> List[str]:
+def process_lines(lines: Iterable[str]) -> list[str]:
     iterator = iter(lines)
-    next(iterator, None)  # Skip header
+    _ = next(iterator, None)  # Skip header
 
     processed = [HEADER]
     for line in iterator:

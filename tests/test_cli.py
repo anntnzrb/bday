@@ -18,7 +18,7 @@ def test_main_requires_single_argument(capsys: pytest.CaptureFixture[str]) -> No
 
 def test_main_invocation_creates_output(tmp_path: Path) -> None:
     csv = tmp_path / "input.csv"
-    csv.write_text(
+    _ = csv.write_text(
         "name;middle;email\nDoe, John;;john.doe@example.com\n",
         encoding="utf-8",
     )
@@ -41,7 +41,7 @@ def test_package_entrypoint(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("bday.cli.main", fake_main)
 
     with pytest.raises(SystemExit) as exc:
-        runpy.run_module("bday", run_name="__main__")
+        _ = runpy.run_module("bday", run_name="__main__")
 
     assert exc.value.code == 0
     assert called["value"] is None

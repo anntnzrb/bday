@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Sequence
+from collections.abc import Sequence
 
 from .pipeline import process_file
 
@@ -17,5 +17,5 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
 
     input_path = Path(args[0])
-    process_file(input_path)
+    _ = process_file(input_path)
     return 0
